@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8080:8080
+    volumes:
+      - ./:/usr/src/app
+    depends_on:
+      - database
+    container_name: mallus-docker-api
+    environment:
+      - 'DB_PORT=3306'
+      - 'DB_HOST=database'
+
+  database:
+    image: mysql
+    ports: 
+      - 33066:3306
+    volumes:
+      - mallus-docker-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: mallus_user
+      MYSQL_PASSWORD: mysecretpassword
+      MYSQL_DATABASE: mallus
+    container_name: mallus-docker-db
+
+# persisted storage
+volumes:
+  mallus-docker-data:
