@@ -1,9 +1,11 @@
 FROM golang:alpine
 
-WORKDIR /mallus_api
+WORKDIR /mallus-api
 
 ADD . .
 
 RUN go mod download
 
-ENTRYPOINT go build server.go && ./server
+RUN go get github.com/githubnemo/CompileDaemon
+
+ENTRYPOINT CompileDaemon -build="go build server.go" -command="./server"
