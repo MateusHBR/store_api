@@ -12,21 +12,18 @@ services:
     depends_on:
       - database
     container_name: mallus-docker-api
-    environment:
-      - 'DB_PORT=3306'
-      - 'DB_HOST=database'
+    env_file:
+      - .env
 
   database:
-    image: mysql
+    image: postgres
+    restart: always
     ports: 
-      - 33066:3306
+      - 5432:5432
     volumes:
-      - mallus-docker-data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: mallus_user
-      MYSQL_PASSWORD: mysecretpassword
-      MYSQL_DATABASE: mallus
+      - mallus-docker-data:/var/lib/postgresql/data
+    env_file:
+      - .env
     container_name: mallus-docker-db
 
 # persisted storage
