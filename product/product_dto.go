@@ -5,6 +5,7 @@ type ProductDTO struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	CreatedAt   string `json:"created_at"`
+	UpdatedAt   string `json:"updated_at"`
 }
 
 func (p ProductDTO) toEntity() Product {
@@ -13,6 +14,7 @@ func (p ProductDTO) toEntity() Product {
 		Name:        p.Name,
 		Description: p.Description,
 		CreatedAt:   p.CreatedAt,
+		UpdatedAt:   p.UpdatedAt,
 	}
 }
 
@@ -21,6 +23,7 @@ func (p ProductDTO) fromEntity(entity Product) ProductDTO {
 	p.Name = entity.Name
 	p.Description = entity.Description
 	p.CreatedAt = entity.CreatedAt
+	p.UpdatedAt = entity.UpdatedAt
 
 	return p
 }

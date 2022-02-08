@@ -5,6 +5,8 @@ type Product struct {
 	Name        string
 	Description string
 	CreatedAt   string
+	UpdatedAt   string
+	RemovedAt   string
 }
 
 type ProductList struct {
