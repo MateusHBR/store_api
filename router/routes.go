@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/MateusHBR/mallus_api/product"
 )
 
 func PingGroup(engine *gin.Engine) {
@@ -12,4 +14,5 @@ func PingGroup(engine *gin.Engine) {
 			"message": "pong",
 		})
 	})
+	engine.GET("/product", product.ListProducts(engine))
 }
