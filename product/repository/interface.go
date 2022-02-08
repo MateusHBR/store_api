@@ -1,7 +1,7 @@
-package product
+package repository
 
 import (
-	entity "github.com/MateusHBR/mallus_api/product/entity"
+	"github.com/MateusHBR/mallus_api/product/entity"
 )
 
 type Repository interface {

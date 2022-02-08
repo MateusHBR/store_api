@@ -1,4 +1,4 @@
-package product
+package service
 
 import (
 	product "github.com/MateusHBR/mallus_api/product/dto"

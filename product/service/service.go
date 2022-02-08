@@ -1,8 +1,8 @@
-package product
+package service
 
 import (
-	dto "github.com/MateusHBR/mallus_api/product/dto"
-	repository "github.com/MateusHBR/mallus_api/product/repository"
+	"github.com/MateusHBR/mallus_api/product/dto"
+	"github.com/MateusHBR/mallus_api/product/repository"
 )
 
 type ProductService struct {

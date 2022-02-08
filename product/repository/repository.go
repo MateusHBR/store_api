@@ -1,27 +1,20 @@
-package product
+package repository
 
 import (
+	"database/sql"
 	"fmt"
 
-	"github.com/MateusHBR/mallus_api/adapter/database"
-
-	product "github.com/MateusHBR/mallus_api/product/entity"
+	"github.com/MateusHBR/mallus_api/product/entity"
 )
 
 type ProductRepository struct {
-	database.DatabaseAdapter
+	*sql.DB
 }
 
-func (pr ProductRepository) GetAllProducts() (product.ProductList, error) {
-	productList := product.ProductList{}
-	db, err := pr.OpenConnection()
+func (pr ProductRepository) GetAllProducts() (entity.ProductList, error) {
+	productList := entity.ProductList{}
 
-	if err != nil {
-		fmt.Println("Failed to connect to database")
-		return productList, err
-	}
-
-	rows, err := db.Query("SELECT id, name, description, created_at FROM product ORDER BY id DESC")
+	rows, err := pr.Query("SELECT id, name, description, created_at FROM product ORDER BY id DESC")
 
 	if err != nil {
 		fmt.Printf("Failed to get query %s \n", err)
@@ -29,7 +22,7 @@ func (pr ProductRepository) GetAllProducts() (product.ProductList, error) {
 	}
 
 	for rows.Next() {
-		var p product.Product
+		var p entity.Product
 		err := rows.Scan(&p.ID, &p.Name, &p.Description, &p.CreatedAt)
 
 		if err != nil {
