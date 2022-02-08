@@ -1,11 +1,14 @@
 package router
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/MateusHBR/mallus_api/server"
+	"github.com/gin-gonic/gin"
+)
 
-type mallusRoute func(*gin.Engine)
+type mallusRoute func(*server.Server, *gin.Engine)
 
-func RegisterRoutes(engine *gin.Engine, routes ...mallusRoute) {
+func RegisterRoutes(server *server.Server, engine *gin.Engine, routes ...mallusRoute) {
 	for _, route := range routes {
-		route(engine)
+		route(server, engine)
 	}
 }

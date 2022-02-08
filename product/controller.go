@@ -5,17 +5,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/MateusHBR/mallus_api/adapter/database"
-	repository "github.com/MateusHBR/mallus_api/product/repository"
-	service "github.com/MateusHBR/mallus_api/product/service"
+	"github.com/MateusHBR/mallus_api/product/repository"
+	"github.com/MateusHBR/mallus_api/product/service"
+	"github.com/MateusHBR/mallus_api/server"
 )
 
-func ListProducts(engine *gin.Engine) gin.HandlerFunc {
+func ListProducts(s *server.Server, engine *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		productService := service.ProductService{
 			Repository: repository.ProductRepository{
-				DatabaseAdapter: database.PQDatabase{},
+				DB: s.DB,
 			},
 		}
 
