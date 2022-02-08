@@ -1,7 +1,7 @@
 package product
 
 type Product struct {
-	ID          int
+	ID          string
 	Name        string
 	Description string
 	CreatedAt   string

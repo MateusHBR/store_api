@@ -1,6 +1,7 @@
 package product
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +11,7 @@ import (
 
 func ListProducts(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		productService := productService{
+		var productService service = productService{
 			repository: productRepository{
 				DB: s.DB,
 			},
@@ -19,5 +20,24 @@ func ListProducts(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
 		products, _ := productService.getAllProducts()
 
 		c.JSON(http.StatusOK, ProductListDTO{}.fromEntity(products))
+	}
+}
+
+func AddProduct(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var productService service = productService{
+			repository: productRepository{
+				DB: s.DB,
+			},
+		}
+
+		var productDto ProductDTO
+		if err := c.BindJSON(&productDto); err != nil {
+			fmt.Println("Failed to read body")
+		}
+
+		product, _ := productService.addProduct(productDto.toEntity())
+
+		c.JSON(http.StatusOK, ProductDTO{}.fromEntity(product))
 	}
 }
