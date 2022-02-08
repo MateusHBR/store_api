@@ -3,6 +3,7 @@ package product
 type service interface {
 	getAllProducts() (ProductList, error)
 	addProduct(p Product) (Product, error)
+	updateProduct(p Product) (Product, error)
 }
 
 type productService struct {
@@ -21,6 +22,16 @@ func (ps productService) getAllProducts() (ProductList, error) {
 
 func (ps productService) addProduct(p Product) (Product, error) {
 	product, err := ps.repository.addProduct(p)
+
+	if err != nil {
+		return Product{}, err
+	}
+
+	return product, nil
+}
+
+func (ps productService) updateProduct(p Product) (Product, error) {
+	product, err := ps.repository.updateProduct(p)
 
 	if err != nil {
 		return Product{}, err

@@ -41,3 +41,22 @@ func AddProduct(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
 		c.JSON(http.StatusOK, ProductDTO{}.fromEntity(product))
 	}
 }
+
+func UpdateProduct(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var productService service = productService{
+			repository: productRepository{
+				DB: s.DB,
+			},
+		}
+
+		var productDto ProductDTO
+		if err := c.BindJSON(&productDto); err != nil {
+			fmt.Println("Failed to read body")
+		}
+
+		product, _ := productService.updateProduct(productDto.toEntity())
+
+		c.JSON(http.StatusOK, ProductDTO{}.fromEntity(product))
+	}
+}
