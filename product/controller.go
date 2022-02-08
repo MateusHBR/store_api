@@ -5,24 +5,19 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/MateusHBR/mallus_api/product/repository"
-	"github.com/MateusHBR/mallus_api/product/service"
 	"github.com/MateusHBR/mallus_api/server"
 )
 
-func ListProducts(s *server.Server, engine *gin.Engine) gin.HandlerFunc {
+func ListProducts(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
-
-		productService := service.ProductService{
-			Repository: repository.ProductRepository{
+		productService := productService{
+			repository: productRepository{
 				DB: s.DB,
 			},
 		}
 
-		productService.GetAllProducts()
+		products, _ := productService.getAllProducts()
 
-		products, _ := productService.GetAllProducts()
-
-		c.JSON(http.StatusOK, products)
+		c.JSON(http.StatusOK, ProductListDTO{}.fromEntity(products))
 	}
 }

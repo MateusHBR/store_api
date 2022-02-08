@@ -1,18 +1,20 @@
-package repository
+package product
 
 import (
 	"database/sql"
 	"fmt"
-
-	"github.com/MateusHBR/mallus_api/product/entity"
 )
 
-type ProductRepository struct {
+type repository interface {
+	getAllProducts() (ProductList, error)
+}
+
+type productRepository struct {
 	*sql.DB
 }
 
-func (pr ProductRepository) GetAllProducts() (entity.ProductList, error) {
-	productList := entity.ProductList{}
+func (pr productRepository) getAllProducts() (ProductList, error) {
+	productList := ProductList{}
 
 	rows, err := pr.Query("SELECT id, name, description, created_at FROM product ORDER BY id DESC")
 
@@ -22,7 +24,7 @@ func (pr ProductRepository) GetAllProducts() (entity.ProductList, error) {
 	}
 
 	for rows.Next() {
-		var p entity.Product
+		var p Product
 		err := rows.Scan(&p.ID, &p.Name, &p.Description, &p.CreatedAt)
 
 		if err != nil {
