@@ -43,6 +43,11 @@ func (p ProductListDTO) toEntity() ProductList {
 }
 
 func (p ProductListDTO) fromEntity(productList ProductList) ProductListDTO {
+	if productList.Products == nil {
+		p.Products = make([]ProductDTO, 0)
+		return p
+	}
+
 	for _, productEntity := range productList.Products {
 		p.Products = append(p.Products, ProductDTO{}.fromEntity(productEntity))
 	}

@@ -1,5 +1,9 @@
 package product
 
+import (
+	"github.com/MateusHBR/mallus_api/adapter/database"
+)
+
 type service interface {
 	getAllProducts() (ProductList, error)
 	addProduct(p Product) (Product, error)
@@ -15,6 +19,10 @@ func (ps productService) getAllProducts() (ProductList, error) {
 	productList, err := ps.repository.getAllProducts()
 
 	if err != nil {
+		if database.IsNoRowsError(err) {
+			return ProductList{}, nil
+		}
+
 		return ProductList{}, err
 	}
 
