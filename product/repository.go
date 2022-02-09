@@ -93,7 +93,6 @@ func (pr productRepository) updateProduct(p Product) (Product, error) {
 		ID:          p.ID,
 		Name:        p.Name,
 		Description: p.Description,
-		CreatedAt:   p.CreatedAt,
 		UpdatedAt:   p.UpdatedAt,
 	}, nil
 }
