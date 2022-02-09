@@ -1,12 +1,14 @@
 package product
 
+import "time"
+
 type Product struct {
 	ID          string
 	Name        string
 	Description string
-	CreatedAt   string
-	UpdatedAt   string
-	RemovedAt   string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	RemovedAt   time.Time
 }
 
 type ProductList struct {

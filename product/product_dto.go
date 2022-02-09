@@ -1,5 +1,7 @@
 package product
 
+import "github.com/MateusHBR/mallus_api/server"
+
 type ProductDTO struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
@@ -13,8 +15,6 @@ func (p ProductDTO) toEntity() Product {
 		ID:          p.ID,
 		Name:        p.Name,
 		Description: p.Description,
-		CreatedAt:   p.CreatedAt,
-		UpdatedAt:   p.UpdatedAt,
 	}
 }
 
@@ -22,8 +22,8 @@ func (p ProductDTO) fromEntity(entity Product) ProductDTO {
 	p.ID = entity.ID
 	p.Name = entity.Name
 	p.Description = entity.Description
-	p.CreatedAt = entity.CreatedAt
-	p.UpdatedAt = entity.UpdatedAt
+	p.CreatedAt = server.FormatTime(entity.CreatedAt)
+	p.UpdatedAt = server.FormatTime(entity.UpdatedAt)
 
 	return p
 }

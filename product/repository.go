@@ -3,8 +3,8 @@ package product
 import (
 	"database/sql"
 	"fmt"
-	"time"
 
+	"github.com/MateusHBR/mallus_api/server"
 	"github.com/google/uuid"
 )
 
@@ -47,11 +47,10 @@ func (pr productRepository) getAllProducts() (ProductList, error) {
 
 func (pr productRepository) addProduct(p Product) (Product, error) {
 	p.ID = uuid.New().String()
-	productCreatedAt := time.Now()
-	p.CreatedAt = productCreatedAt.Format(time.RFC3339)
+	p.CreatedAt = server.TimeNow()
 	p.UpdatedAt = p.CreatedAt
 
-	_, err := pr.Exec("INSERT INTO product(id, name, description, created_at, updated_at) values($1, $2, $3, $4, $5)", p.ID, p.Name, p.Description, productCreatedAt, productCreatedAt)
+	_, err := pr.Exec("INSERT INTO product(id, name, description, created_at, updated_at) values($1, $2, $3, $4, $5)", p.ID, p.Name, p.Description, p.CreatedAt, p.UpdatedAt)
 	if err != nil {
 		fmt.Printf("Failed to insert product %s \n", err)
 		return Product{}, err
@@ -67,8 +66,7 @@ func (pr productRepository) addProduct(p Product) (Product, error) {
 }
 
 func (pr productRepository) updateProduct(p Product) (Product, error) {
-	productUpdatedAt := time.Now()
-	p.UpdatedAt = productUpdatedAt.Format(time.RFC3339)
+	p.UpdatedAt = server.TimeNow()
 
 	_, err := pr.Exec("UPDATE product SET name=$1, description=$2, updated_at=$3 WHERE id=$4", p.Name, p.Description, p.UpdatedAt, p.ID)
 
