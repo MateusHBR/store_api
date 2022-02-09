@@ -25,7 +25,7 @@ func (pr productRepository) getAllProducts() (ProductList, error) {
 
 	sqlStmt := `
 	SELECT id, name, description, created_at, updated_at
-	FROM product`
+	FROM products`
 	rows, err := pr.Query(sqlStmt)
 
 	if err != nil {
@@ -55,7 +55,7 @@ func (pr productRepository) addProduct(p Product) (Product, error) {
 	p.UpdatedAt = p.CreatedAt
 
 	sqlStmt := `
-	INSERT INTO product(id, name, description, created_at, updated_at)
+	INSERT INTO products(id, name, description, created_at, updated_at)
 	values($1, $2, $3, $4, $5)`
 	_, err := pr.Exec(sqlStmt, p.ID, p.Name, p.Description, p.CreatedAt, p.UpdatedAt)
 	if err != nil {
@@ -76,13 +76,12 @@ func (pr productRepository) updateProduct(p Product) (Product, error) {
 	p.UpdatedAt = server.TimeNow()
 
 	sqlStmt := `
-	UPDATE product
+	UPDATE products
 	SET name=$1, description=$2, updated_at=$3
 	WHERE id=$4`
 	res, err := pr.Exec(sqlStmt, p.Name, p.Description, p.UpdatedAt, p.ID)
 
 	if err != nil {
-		fmt.Printf("Failed to insert product %s \n", err)
 		return Product{}, err
 	}
 
@@ -101,7 +100,7 @@ func (pr productRepository) updateProduct(p Product) (Product, error) {
 
 func (pr productRepository) deleteProduct(id string) error {
 
-	res, err := pr.Exec("DELETE FROM product WHERE id=$1", id)
+	res, err := pr.Exec("DELETE FROM products WHERE id=$1", id)
 
 	if err != nil {
 		return err
