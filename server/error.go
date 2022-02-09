@@ -1,6 +1,13 @@
 package server
 
-import "net/http"
+import (
+	"errors"
+	"net/http"
+)
+
+var ErrorNotFound = errors.New("server: not found")
+var ErrorBadRequest = errors.New("server: bad request")
+var ErrorUnauthorized = errors.New("server: unauthorized")
 
 func setErrorMessage(message string) map[string]interface{} {
 	m := make(map[string]interface{})
@@ -10,7 +17,7 @@ func setErrorMessage(message string) map[string]interface{} {
 	return m
 }
 
-func MakeNotFound(m string) (int, map[string]interface{}) {
+func MakeNotFoundResponse(m string) (int, map[string]interface{}) {
 	if m != "" {
 		return http.StatusNotFound, setErrorMessage(m)
 	}
@@ -18,7 +25,7 @@ func MakeNotFound(m string) (int, map[string]interface{}) {
 	return http.StatusNotFound, setErrorMessage("Não encontrado")
 }
 
-func MakeBadRequest(m string) (int, map[string]interface{}) {
+func MakeBadRequestResponse(m string) (int, map[string]interface{}) {
 	if m != "" {
 		return http.StatusBadRequest, setErrorMessage(m)
 	}
@@ -26,6 +33,6 @@ func MakeBadRequest(m string) (int, map[string]interface{}) {
 	return http.StatusBadRequest, setErrorMessage("Dados inválidos")
 }
 
-func MakeInternalServerError() (int, map[string]interface{}) {
+func MakeInternalServerErrorResponse() (int, map[string]interface{}) {
 	return http.StatusInternalServerError, setErrorMessage("Um erro desconhecido aconteceu")
 }
