@@ -22,7 +22,7 @@ func main() {
 
 	s := server.New().WithDatabaseConnection(dbConnct)
 
-	router.RegisterRoutes(&s, engine, router.PingGroup)
+	router.RegisterRoutes(&s, engine, router.PingGroup, router.AuthGroup)
 
 	engine.Run()
 }

@@ -30,7 +30,7 @@ func MakeBadRequestResponse(m string) (int, map[string]interface{}) {
 		return http.StatusBadRequest, setErrorMessage(m)
 	}
 
-	return http.StatusBadRequest, setErrorMessage("Dados inválidos")
+	return http.StatusBadRequest, setErrorMessage("Os dados enviados são inválidos")
 }
 
 func MakeInternalServerErrorResponse() (int, map[string]interface{}) {

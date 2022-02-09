@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/MateusHBR/mallus_api/auth"
 	"github.com/MateusHBR/mallus_api/product"
 	"github.com/MateusHBR/mallus_api/server"
 )
@@ -19,4 +20,8 @@ func PingGroup(s *server.Server, engine *gin.Engine) {
 	engine.POST("/product", product.AddProduct(s, engine))
 	engine.PUT("/product/:id", product.UpdateProduct(s, engine))
 	engine.DELETE("/product/:id", product.DeleteProduct(s, engine))
+}
+
+func AuthGroup(s *server.Server, engine *gin.Engine) {
+	engine.POST("/signup", auth.SignUp(s, engine))
 }
