@@ -12,6 +12,7 @@ type repository interface {
 	getAllProducts() (ProductList, error)
 	addProduct(p Product) (Product, error)
 	updateProduct(p Product) (Product, error)
+	deleteProduct(id string) error
 }
 
 type productRepository struct {
@@ -83,4 +84,16 @@ func (pr productRepository) updateProduct(p Product) (Product, error) {
 		CreatedAt:   p.CreatedAt,
 		UpdatedAt:   p.UpdatedAt,
 	}, nil
+}
+
+func (pr productRepository) deleteProduct(id string) error {
+
+	_, err := pr.Exec("DELETE FROM product WHERE id=$1", id)
+
+	if err != nil {
+		fmt.Printf("Failed to insert product %s \n", err)
+		return err
+	}
+
+	return nil
 }

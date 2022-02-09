@@ -4,6 +4,7 @@ type service interface {
 	getAllProducts() (ProductList, error)
 	addProduct(p Product) (Product, error)
 	updateProduct(p Product) (Product, error)
+	deleteProduct(id string) error
 }
 
 type productService struct {
@@ -38,4 +39,14 @@ func (ps productService) updateProduct(p Product) (Product, error) {
 	}
 
 	return product, nil
+}
+
+func (ps productService) deleteProduct(id string) error {
+	err := ps.repository.deleteProduct(id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

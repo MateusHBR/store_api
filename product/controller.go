@@ -38,7 +38,7 @@ func AddProduct(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
 
 		product, _ := productService.addProduct(productDto.toEntity())
 
-		c.JSON(http.StatusOK, ProductDTO{}.fromEntity(product))
+		c.JSON(http.StatusCreated, ProductDTO{}.fromEntity(product))
 	}
 }
 
@@ -60,5 +60,23 @@ func UpdateProduct(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
 		product, _ := productService.updateProduct(productDto.toEntity())
 
 		c.JSON(http.StatusOK, ProductDTO{}.fromEntity(product))
+	}
+}
+
+func DeleteProduct(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var productService service = productService{
+			repository: productRepository{
+				DB: s.DB,
+			},
+		}
+
+		err := productService.deleteProduct(c.Param("id"))
+
+		if err != nil {
+			fmt.Println("Error deleting")
+		}
+
+		c.JSON(http.StatusNoContent, "")
 	}
 }
