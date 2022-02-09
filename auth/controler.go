@@ -9,7 +9,9 @@ import (
 
 func SignUp(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		//TODO: get from os.Getenv("ACCESS_SECRET")
 		var authService Service = AuthService{
+			jwtKey: "asdasdsadasasd-key",
 			repository: authRepository{
 				DB: s.DB,
 			},

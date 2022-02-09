@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/MateusHBR/mallus_api/server"
@@ -12,10 +13,21 @@ type Service interface {
 }
 
 type AuthService struct {
+	jwtKey     string
 	repository repository
 }
 
-func createToken(data CreateAccount) (string, error) {
+func (as AuthService) validateToken(encodedToken string) (*jwt.Token, error) {
+	return jwt.Parse(encodedToken, func(token *jwt.Token) (interface{}, error) {
+		if _, isValid := token.Method.(*jwt.SigningMethodHMAC); !isValid {
+			return nil, fmt.Errorf("Invalid token", token.Header["alg"])
+		}
+
+		return []byte(as.jwtKey), nil
+	})
+}
+
+func (as AuthService) createToken(data CreateAccount) (string, error) {
 	var expires = server.TimeNow().Add(time.Minute * 15)
 
 	claims := &JwtClaims{
@@ -30,8 +42,7 @@ func createToken(data CreateAccount) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	//TODO: get from os.Getenv("ACCESS_SECRET")
-	tokenString, err := token.SignedString([]byte("my-secret-jwt-key"))
+	tokenString, err := token.SignedString([]byte(as.jwtKey))
 
 	if err != nil {
 		return "", err
@@ -48,7 +59,7 @@ func (as AuthService) createAccount(user CreateAccount) (string, error) {
 		return "", err
 	}
 
-	token, err := createToken(res)
+	token, err := as.createToken(res)
 
 	if err != nil {
 		return "", err

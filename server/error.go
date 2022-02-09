@@ -17,6 +17,10 @@ func setErrorMessage(message string) map[string]interface{} {
 	return m
 }
 
+func MakeUnauthorizedResponse() (int, map[string]interface{}) {
+	return http.StatusUnauthorized, setErrorMessage("Acesso não autorizado")
+}
+
 func MakeNotFoundResponse(m string) (int, map[string]interface{}) {
 	if m != "" {
 		return http.StatusNotFound, setErrorMessage(m)
