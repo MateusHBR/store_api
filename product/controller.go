@@ -32,7 +32,7 @@ func AddProduct(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
 		}
 
 		var productDto ProductDTO
-		if err := c.BindJSON(&productDto); err != nil {
+		if err := c.ShouldBindJSON(&productDto); err != nil {
 			c.AbortWithStatusJSON(server.MakeBadRequestResponse(""))
 			return
 		}
