@@ -17,5 +17,5 @@ func PingGroup(s *server.Server, engine *gin.Engine) {
 	})
 	engine.GET("/product", product.ListProducts(s, engine))
 	engine.POST("/product", product.AddProduct(s, engine))
-	engine.PUT("/product", product.UpdateProduct(s, engine))
+	engine.PUT("/product/:id", product.UpdateProduct(s, engine))
 }

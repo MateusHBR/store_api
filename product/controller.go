@@ -55,6 +55,8 @@ func UpdateProduct(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
 			fmt.Println("Failed to read body")
 		}
 
+		productDto.ID = c.Param("id")
+
 		product, _ := productService.updateProduct(productDto.toEntity())
 
 		c.JSON(http.StatusOK, ProductDTO{}.fromEntity(product))
