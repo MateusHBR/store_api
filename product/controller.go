@@ -1,7 +1,7 @@
 package product
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -59,7 +59,17 @@ func UpdateProduct(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
 
 		productDto.ID = c.Param("id")
 
-		product, _ := productService.updateProduct(productDto.toEntity())
+		product, err := productService.updateProduct(productDto.toEntity())
+
+		if err != nil {
+			if errors.Is(server.ErrorNotFound, err) {
+				c.AbortWithStatusJSON(server.MakeNotFoundResponse("O produto que você está procurando não existe mais."))
+				return
+			}
+
+			c.AbortWithStatusJSON(server.MakeInternalServerErrorResponse())
+			return
+		}
 
 		c.JSON(http.StatusOK, ProductDTO{}.fromEntity(product))
 	}
@@ -76,7 +86,13 @@ func DeleteProduct(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
 		err := productService.deleteProduct(c.Param("id"))
 
 		if err != nil {
-			fmt.Println("Error deleting")
+			if errors.Is(server.ErrorNotFound, err) {
+				c.AbortWithStatusJSON(server.MakeNotFoundResponse("O produto que você está procurando não existe mais."))
+				return
+			}
+
+			c.AbortWithStatusJSON(server.MakeInternalServerErrorResponse())
+			return
 		}
 
 		c.JSON(http.StatusNoContent, "")

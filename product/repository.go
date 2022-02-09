@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/MateusHBR/mallus_api/adapter/database"
 	"github.com/MateusHBR/mallus_api/server"
 	"github.com/google/uuid"
 )
@@ -78,10 +79,14 @@ func (pr productRepository) updateProduct(p Product) (Product, error) {
 	UPDATE product
 	SET name=$1, description=$2, updated_at=$3
 	WHERE id=$4`
-	_, err := pr.Exec(sqlStmt, p.Name, p.Description, p.UpdatedAt, p.ID)
+	res, err := pr.Exec(sqlStmt, p.Name, p.Description, p.UpdatedAt, p.ID)
 
 	if err != nil {
 		fmt.Printf("Failed to insert product %s \n", err)
+		return Product{}, err
+	}
+
+	if err := database.CheckHasNoRowsAffected(res); err != nil {
 		return Product{}, err
 	}
 
@@ -96,12 +101,11 @@ func (pr productRepository) updateProduct(p Product) (Product, error) {
 
 func (pr productRepository) deleteProduct(id string) error {
 
-	_, err := pr.Exec("DELETE FROM product WHERE id=$1", id)
+	res, err := pr.Exec("DELETE FROM product WHERE id=$1", id)
 
 	if err != nil {
-		fmt.Printf("Failed to insert product %s \n", err)
 		return err
 	}
 
-	return nil
+	return database.CheckHasNoRowsAffected(res)
 }

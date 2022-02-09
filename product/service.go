@@ -2,6 +2,7 @@ package product
 
 import (
 	"github.com/MateusHBR/mallus_api/adapter/database"
+	"github.com/MateusHBR/mallus_api/server"
 )
 
 type service interface {
@@ -43,6 +44,10 @@ func (ps productService) updateProduct(p Product) (Product, error) {
 	product, err := ps.repository.updateProduct(p)
 
 	if err != nil {
+		if database.IsNoRowsError(err) {
+			return Product{}, server.ErrorNotFound
+		}
+
 		return Product{}, err
 	}
 
@@ -53,6 +58,10 @@ func (ps productService) deleteProduct(id string) error {
 	err := ps.repository.deleteProduct(id)
 
 	if err != nil {
+		if database.IsNoRowsError(err) {
+			return server.ErrorNotFound
+		}
+
 		return err
 	}
 
