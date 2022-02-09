@@ -33,7 +33,8 @@ func AddProduct(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
 
 		var productDto ProductDTO
 		if err := c.BindJSON(&productDto); err != nil {
-			fmt.Println("Failed to read body")
+			c.AbortWithStatusJSON(server.MakeBadRequest(""))
+			return
 		}
 
 		product, _ := productService.addProduct(productDto.toEntity())
@@ -52,7 +53,8 @@ func UpdateProduct(s *server.Server, _ *gin.Engine) gin.HandlerFunc {
 
 		var productDto ProductDTO
 		if err := c.BindJSON(&productDto); err != nil {
-			fmt.Println("Failed to read body")
+			c.AbortWithStatusJSON(server.MakeBadRequest(""))
+			return
 		}
 
 		productDto.ID = c.Param("id")
