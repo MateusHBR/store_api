@@ -22,7 +22,10 @@ type productRepository struct {
 func (pr productRepository) getAllProducts() (ProductList, error) {
 	productList := ProductList{}
 
-	rows, err := pr.Query("SELECT id, name, description, created_at, updated_at FROM product")
+	sqlStmt := `
+	SELECT id, name, description, created_at, updated_at
+	FROM product`
+	rows, err := pr.Query(sqlStmt)
 
 	if err != nil {
 		fmt.Printf("Failed to get query %s \n", err)
@@ -50,7 +53,10 @@ func (pr productRepository) addProduct(p Product) (Product, error) {
 	p.CreatedAt = server.TimeNow()
 	p.UpdatedAt = p.CreatedAt
 
-	_, err := pr.Exec("INSERT INTO product(id, name, description, created_at, updated_at) values($1, $2, $3, $4, $5)", p.ID, p.Name, p.Description, p.CreatedAt, p.UpdatedAt)
+	sqlStmt := `
+	INSERT INTO product(id, name, description, created_at, updated_at)
+	values($1, $2, $3, $4, $5)`
+	_, err := pr.Exec(sqlStmt, p.ID, p.Name, p.Description, p.CreatedAt, p.UpdatedAt)
 	if err != nil {
 		fmt.Printf("Failed to insert product %s \n", err)
 		return Product{}, err
@@ -68,7 +74,11 @@ func (pr productRepository) addProduct(p Product) (Product, error) {
 func (pr productRepository) updateProduct(p Product) (Product, error) {
 	p.UpdatedAt = server.TimeNow()
 
-	_, err := pr.Exec("UPDATE product SET name=$1, description=$2, updated_at=$3 WHERE id=$4", p.Name, p.Description, p.UpdatedAt, p.ID)
+	sqlStmt := `
+	UPDATE product
+	SET name=$1, description=$2, updated_at=$3
+	WHERE id=$4`
+	_, err := pr.Exec(sqlStmt, p.Name, p.Description, p.UpdatedAt, p.ID)
 
 	if err != nil {
 		fmt.Printf("Failed to insert product %s \n", err)
