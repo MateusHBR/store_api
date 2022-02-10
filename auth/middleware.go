@@ -20,6 +20,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 			return
 		}
 
+		c.Set("claims", token.Claims)
 		c.Next()
 	}
 }

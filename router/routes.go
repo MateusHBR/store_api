@@ -24,4 +24,5 @@ func PingGroup(s *server.Server, engine *gin.Engine) {
 
 func AuthGroup(s *server.Server, engine *gin.Engine) {
 	engine.POST("/signup", auth.SignUp(s, engine))
+	engine.POST("/refresh", auth.AuthorizeJWT(), auth.Refresh(s, engine))
 }

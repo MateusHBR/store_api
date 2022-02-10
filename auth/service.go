@@ -10,6 +10,7 @@ import (
 
 type Service interface {
 	createAccount(CreateAccount) (string, error)
+	refreshToken() (string, error)
 }
 
 type AuthService struct {
@@ -50,6 +51,11 @@ func (as AuthService) createToken(data CreateAccount) (string, error) {
 
 	return tokenString, nil
 
+}
+
+//TODO: implement refresh token
+func (as AuthService) refreshToken() (string, error) {
+	return "", nil
 }
 
 func (as AuthService) createAccount(user CreateAccount) (string, error) {
