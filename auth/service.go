@@ -8,17 +8,17 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-type Service interface {
+type service interface {
 	createAccount(CreateAccount) (string, error)
 	refreshToken() (string, error)
 }
 
-type AuthService struct {
+type authService struct {
 	jwtKey     string
 	repository repository
 }
 
-func (as AuthService) validateToken(encodedToken string) (*jwt.Token, error) {
+func (as authService) validateToken(encodedToken string) (*jwt.Token, error) {
 	return jwt.Parse(encodedToken, func(token *jwt.Token) (interface{}, error) {
 		if _, isValid := token.Method.(*jwt.SigningMethodHMAC); !isValid {
 			return nil, fmt.Errorf("Invalid token %s", token.Header["alg"])
@@ -28,7 +28,7 @@ func (as AuthService) validateToken(encodedToken string) (*jwt.Token, error) {
 	})
 }
 
-func (as AuthService) createToken(data CreateAccount) (string, error) {
+func (as authService) createToken(data CreateAccount) (string, error) {
 	var expires = server.TimeNow().Add(time.Minute * 15)
 
 	claims := &JwtClaims{
@@ -54,11 +54,11 @@ func (as AuthService) createToken(data CreateAccount) (string, error) {
 }
 
 //TODO: implement refresh token
-func (as AuthService) refreshToken() (string, error) {
+func (as authService) refreshToken() (string, error) {
 	return "", nil
 }
 
-func (as AuthService) createAccount(user CreateAccount) (string, error) {
+func (as authService) createAccount(user CreateAccount) (string, error) {
 	res, err := as.repository.createAccount(user)
 
 	if err != nil {

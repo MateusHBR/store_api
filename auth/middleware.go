@@ -11,7 +11,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		tokenString := authHeader[len(BREARER_SCHEMA):]
-		token, err := AuthService{
+		token, err := authService{
 			jwtKey: "asdasdsadasasd-key",
 		}.validateToken(tokenString)
 
