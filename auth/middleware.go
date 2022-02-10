@@ -19,5 +19,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 			c.AbortWithStatusJSON(server.MakeUnauthorizedResponse())
 			return
 		}
+
+		c.Next()
 	}
 }
