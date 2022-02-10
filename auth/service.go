@@ -21,7 +21,7 @@ type AuthService struct {
 func (as AuthService) validateToken(encodedToken string) (*jwt.Token, error) {
 	return jwt.Parse(encodedToken, func(token *jwt.Token) (interface{}, error) {
 		if _, isValid := token.Method.(*jwt.SigningMethodHMAC); !isValid {
-			return nil, fmt.Errorf("Invalid token", token.Header["alg"])
+			return nil, fmt.Errorf("Invalid token %s", token.Header["alg"])
 		}
 
 		return []byte(as.jwtKey), nil
